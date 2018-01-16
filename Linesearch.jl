@@ -1,16 +1,17 @@
 # An implementation of the linesearch method
-# Linesearch(model,algo;ϵa,ϵr,itemax) solves a continuous optimization problem 'model' with tolerances ϵa and ϵr.
-# Steps are calculated using the argument 'algo', an optimization method using linesearch.
 
-"""An implementation of the trust-region method
+"""An implementation of the linesearch method.
+Linesearch(model, algo ; ϵa, ϵr, itemax) solves a continuous optimization
+problem 'model' with absolute and relative tolerances ϵa and ϵr.
+Steps are calculated using the argument 'algo', an optimization method using linesearch
 """
 function Linesearch(model, algo ; ϵa::Float64=1e-6, ϵr::Float64=1e-6, itemax::Int=10000)
 
     @info(loggerLin, @sprintf("Linesearch: resolution of %s using %s", model.meta.name, string(algo)))
     x = model.meta.x0 # initial estimation from the model
-	n = model.meta.nvar # size of the problem
-	g = grad(model, x) # ∇f(x_0)
-	H = hess_op(model, x) # ∇²f(x_0)
+    n = model.meta.nvar # size of the problem
+    g = grad(model, x) # ∇f(x_0)
+    H = hess_op(model, x) # ∇²f(x_0)
 
     normg0 = norm(g,2) # ‖∇f(x_0)‖
     normg = normg0 # ‖∇f(x_k)‖
@@ -21,28 +22,28 @@ function Linesearch(model, algo ; ϵa::Float64=1e-6, ϵr::Float64=1e-6, itemax::
 
     fvalues = [fx] # improving values of the objective
     k = 0 # number of iterations
-    ite = [] # number of "successfull" iterations
-    mvalues = [fx] # values of the quadratic model
 
     @debug(loggerLin, @sprintf("%4s  %9s  %7s", "Iter", "f", "‖∇f‖"))
     @debug(loggerLin, @sprintf("%4d  %9.2e  %7.1e", k, fx, normg))
 
     while normg > ϵ && k < itemax # stopping criterion : ‖∇f(x_k)‖ <= ϵ or k >= itemax
         k += 1
-        s = algo(H, -g, 0., min(0.1, sqrt(normg))) # step
-        xold = x
-        x = Armijo(model, x, s, fx, g) 
-        x == xold && return [@sprintf("%5s %5s %4d %8.1e %8.1e %7.1e %7.1e %4d %4d %4d %4d", model.meta.name[22:end], string(algo), n, fx, fx0, normg, normg0, neval_obj(model), neval_grad(model), neval_hprod(model), k)]
-        fx = obj(model, x) # f(x_k + s)
+        s = algo(H, -g, 0., min(0.1, sqrt(normg))) # descent direction
+        if norm(s,2) == 0
+            optimal = false
+            tired = false
+            status = "fail"
+            return x, fx, normg, k, optimal, tired, status # for use of two_solvers()
+            # return [model.meta.name[22:end] string(algo) n fx fx0 normg normg0 neval_obj(model) neval_grad(model) neval_hprod(model) k]
+        end
+        X = Armijo(model, x, s, fx, g)
+        x = X[1]
+        fx = X[2]
         fvalues = push!(fvalues, fx)
-        @debug(loggerLin, @sprintf("fx = %8.1e", fx))
         g = grad(model, x)
         normg = norm(g,2)
-        @debug(loggerLin, @sprintf("‖g‖ = %8.1e", normg))
+        @debug(loggerLin, @sprintf("%4d  %8.1e  %7.1e", k, fx, normg))
         H = hess_op(model, x)
-        Hs = H * s
-        m = fx + dot(g,s) + 0.5 * dot(s,Hs) # m_k(x_k + s)
-
     end
 
     @info(loggerLin, @sprintf("%30s %s %9s %9s %9s %9s %3s %3s %4s %4s","name", "nvar", "f(x*)", "/ f(x0)", "‖∇f(x*)‖", "/ ‖∇f(x0)‖", "#f", "#g", "#Hv", "#it"))
@@ -52,6 +53,6 @@ function Linesearch(model, algo ; ϵa::Float64=1e-6, ϵr::Float64=1e-6, itemax::
     tired = k ≥ itemax
     status = optimal ? "optimal" : "tired"
 
-    # return x
-    return [@sprintf("%5s %5s %4d %8.1e %8.1e %7.1e %7.1e %4d %4d %4d %4d", model.meta.name[22:end], string(algo), n, fx, fx0, normg, normg0, neval_obj(model), neval_grad(model), neval_hprod(model), k)]
+    return x, fx, normg, k, optimal, tired, status # for use of two_solvers()
+    # return [model.meta.name[22:end] string(algo) n fx fx0 normg normg0 neval_obj(model) neval_grad(model) neval_hprod(model) k]
 end
