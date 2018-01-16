@@ -1,9 +1,9 @@
 import Krylov
 
 # A version of the conjugate gradient method for linesearch.
-# CG(A, b, ϵa, ϵr, itmax) solves the linear system 'A * x = b'.
 
-"""A version of the conjugate gradient method for linesearch to solve the symmetric linear system Ax=b.
+"""A version of the conjugate gradient method for linesearch.
+CG(A, b, ϵa, ϵr, itmax) solves the symmetric linear system 'A * x = b'
 A can be positive definite or not.
 """
 function CGlin(A, b, ϵa::Float64=1e-8, ϵr::Float64=1e-6, itmax::Int=0; args...)
