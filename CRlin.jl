@@ -1,10 +1,11 @@
 import Krylov
 
 # A version of Stiefel’s Conjugate Residual method for linesearch.
-# CR(A, b, ϵa, ϵr, itmax) solves the linear system 'A * x = b' or the least-squares problem :
-# 'min ‖b - A * x‖²'.
 
-"""A version of Stiefel’s Conjugate Residual method for linesearch to solve the symmetric linear system Ax=b.
+"""A version of Stiefel’s Conjugate Residual method for linesearch.
+CR(A, b, ϵa, ϵr, itmax) solves the symmetric linear system 'A * x = b'
+or the least-squares problem : 'min ‖b - A * x‖²'
+A can be positive definite or not.
 """
 function CRlin(A, b, ϵa::Float64=1e-8, ϵr::Float64=1e-6, itmax::Int=0; args...)
     n = size(b, 1) # size of the problem
