@@ -18,12 +18,15 @@ scosine, Shpak1, Shpak2, Shpak3, Shpak4, Shpak5, Shpak6, sinquad, sparsine, spar
 
 Algos = [CGlin, CRlin]
 
-D = ["model     algo nvar   f(x)    f(x0)   ‖g(x)‖  ‖g(x0)‖   #f  #g  #Hv  #it"]
+D = ["model   algo   nvar   f(x)    f(x0)   ‖g(x)‖  ‖g(x0)‖   #f  #g  #Hv  #it"]
 
 for problem in Problems
     model = MathProgNLPModel(problem(), name=string(problem))
     for algo in Algos
-        D = vcat(D, Linesearch(model, algo))
+        L = Linesearch(model, algo)
+        S = @sprintf("%5s %5s %4d %8.1e %8.1e %7.1e %7.1e %4d %4d %4d %4d", L[1], L[2], L[3], L[4], L[5], L[6], L[7], L[8], L[9], L[10], L[11])
+        @info(loggerlaunch, S)
+        D = vcat(D, S)
         reset!(model)
   end
 end
