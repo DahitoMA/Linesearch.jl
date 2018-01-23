@@ -37,6 +37,7 @@ function CGlin(A, b, ϵa::Float64=1e-8, ϵr::Float64=1e-6, itmax::Int=0; args...
         # if the model is not convexe, the algorithm stops
         if dAd ≤ 0
             @debug(loggerCGlin, @sprintf("non positive curvature dAd = %8.1e", dAd))
+            iter == 1 && return b
             return x
         end
 
