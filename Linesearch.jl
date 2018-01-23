@@ -29,13 +29,6 @@ function Linesearch(model, algo ; ϵa::Float64=1e-6, ϵr::Float64=1e-6, itemax::
     while normg > ϵ && k < itemax # stopping criterion : ‖∇f(x_k)‖ <= ϵ or k >= itemax
         k += 1
         s = algo(H, -g, 0., min(0.1, sqrt(normg))) # descent direction
-        if norm(s,2) == 0
-            optimal = false
-            tired = false
-            status = "fail"
-            return x, fx, normg, k, optimal, tired, status # for use of two_solvers()
-            # return [model.meta.name[22:end] string(algo) n fx fx0 normg normg0 neval_obj(model) neval_grad(model) neval_hprod(model) k]
-        end
         X = Armijo(model, x, s, fx, g)
         x = X[1]
         fx = X[2]
@@ -53,6 +46,6 @@ function Linesearch(model, algo ; ϵa::Float64=1e-6, ϵr::Float64=1e-6, itemax::
     tired = k ≥ itemax
     status = optimal ? "optimal" : "tired"
 
-    return x, fx, normg, k, optimal, tired, status # for use of two_solvers()
-    # return [model.meta.name[22:end] string(algo) n fx fx0 normg normg0 neval_obj(model) neval_grad(model) neval_hprod(model) k]
+    # return x, fx, normg, k, optimal, tired, status # for use of two_solvers()
+    return [model.meta.name[22:end] string(algo) n fx fx0 normg normg0 neval_obj(model) neval_grad(model) neval_hprod(model) k]
 end
