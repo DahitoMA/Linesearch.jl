@@ -41,6 +41,7 @@ function CRlin(A, b, ϵa::Float64=1e-8, ϵr::Float64=1e-6, itmax::Int=0; args...
 
         if pAp ≤ 0 || ρ ≤ 0
             @debug(loggerCRlin, @sprintf("nonpositive curvature detected: pAp = %8.1e and rAr = %8.1e", pAp, ρ))
+            iter == 1 && return b
             return x
         end
 
