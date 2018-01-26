@@ -19,6 +19,7 @@ scosine, Shpak1, Shpak2, Shpak3, Shpak4, Shpak5, Shpak6, sinquad, sparsine, spar
 Algos = [CGlin, CRlin]
 
 D = ["model   algo   nvar   f(x)    f(x0)   ‖g(x)‖  ‖g(x0)‖   #f  #g  #Hv  #it"]
+@info(loggerlaunch, D[1])
 
 for problem in Problems
     model = MathProgNLPModel(problem(), name=string(problem))
