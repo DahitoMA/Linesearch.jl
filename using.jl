@@ -9,19 +9,19 @@ using MiniLogging
 basic_config(MiniLogging.INFO; date_format="%Y-%m-%d %H:%M:%S")
 loggerCRlin = get_logger("CRlin")
 loggerCGlin = get_logger("CGlin")
-loggerWolfe = get_logger("StrongWolfe")
+loggerArm = get_logger("Armijo")
 loggerLin = get_logger("Linesearch")
 loggerlaunch = get_logger("launch_linesearch.jl")
 
 loggerCRlin.level = MiniLogging.ERROR
 loggerCGlin.level = MiniLogging.ERROR
-loggerWolfe.level = MiniLogging.ERROR
+loggerArm.level = MiniLogging.ERROR
 loggerLin.level = MiniLogging.ERROR
 # loggerlaunch.level = MiniLogging.ERROR
 
 include("CGlin.jl")
 include("CRlin.jl")
-include("StrongWolfe.jl")
+include("Armijo.jl")
 include("Linesearch.jl")
 include("LCG.jl")
 include("LCR.jl")
