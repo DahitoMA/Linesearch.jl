@@ -50,13 +50,12 @@ function CRlin(A, b, ϵa::Float64=1e-8, ϵr::Float64=1e-6, itmax::Int=0; quad::B
         x = x + α * p
         xNorm = norm(x, 2)
         push!(xNorms, xNorm)
-        Ax = A * x
         r = r - α * q  # residual
         rNorm² = abs(rNorm² - α * ρ)
         rNorm = sqrt(rNorm²)
 
         if quad
-            m = -dot(b, x) + 0.5 * dot(x, Ax)
+            m = -dot(b, x) + 0.5 * dot(x, A * x)
             push!(mvalues, m)
             @info(loggerCRlin, @sprintf("%5d %7.1e %8.1e", iter, rNorm, m))
         end
