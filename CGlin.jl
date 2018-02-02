@@ -1,12 +1,11 @@
-import Krylov
-
 # A version of the conjugate gradient method for linesearch.
 
 """A version of the conjugate gradient method for linesearch.
-CG(A, b, ϵa, ϵr, itmax) solves the symmetric linear system 'A * x = b'
+CG(A, b, ϵa, ϵr, itmax; quad) solves the symmetric linear system 'A * x = b'
+If quad = true, the values of the quadratic model are computed
 A can be positive definite or not.
 """
-function CGlin(A, b, ϵa::Float64=1e-8, ϵr::Float64=1e-6, itmax::Int=0; args...)
+function CGlin(A, b, ϵa::Float64=1e-8, ϵr::Float64=1e-6, itmax::Int=0; quad::Bool=false)
     n = size(b, 1) # size of the problem
     (size(A, 1) == n & size(A, 2) == n) || error("Inconsistent problem size")
     @info(loggerCGlin, @sprintf("CGlin: system of %d equations in %d variables", n, n))
@@ -18,13 +17,15 @@ function CGlin(A, b, ϵa::Float64=1e-8, ϵr::Float64=1e-6, itmax::Int=0; args...
     d = b # first descent direction
     rNorm = norm(r, 2)
     ϵ = ϵa + ϵr * rNorm
-    q = 0.0
-    qvalues = [q] # values of the quadratic model
+    if quad
+        q = 0.0
+        qvalues = [q] # values of the quadratic model
+        @info(loggerCGlin, @sprintf("%5s %10s %10s\n", "Iter", "‖r‖", "q"))
+        @info(loggerCGlin, @sprintf("    %d    %8.1e    %8.1e", iter, rNorm, q))
+    end
 
     iter = 0
     itmax == 0 && (itmax = 2 * n)
-    @info(loggerCGlin, @sprintf("%5s %10s %10s\n", "Iter", "‖r‖", "q"))
-    @info(loggerCGlin, @sprintf("    %d    %8.1e    %8.1e", iter, rNorm, q))
 
     solved = rNorm ≤ ϵ
     tired = iter ≥ itmax
@@ -35,7 +36,7 @@ function CGlin(A, b, ϵa::Float64=1e-8, ϵr::Float64=1e-6, itmax::Int=0; args...
         dAd = dot(d, Ad)
 
         # if the model is not convexe, the algorithm stops
-        if dAd ≤ 0
+        if dAd ≤ ϵ * dot(d, d)
             @debug(loggerCGlin, @sprintf("non positive curvature dAd = %8.1e", dAd))
             iter == 1 && return b
             return x
@@ -45,13 +46,15 @@ function CGlin(A, b, ϵa::Float64=1e-8, ϵr::Float64=1e-6, itmax::Int=0; args...
         x = x + α * d # new estimation
         xNorm = norm(x, 2)
         push!(xNorms, xNorm)
-        q = -dot(b, x) + 0.5 * dot(x, A * x)
-        push!(qvalues, q)
         roldNorm = rNorm
         r = r + α * Ad # new residual
         rNorm = norm(r, 2)
 
-        @info(loggerCGlin, @sprintf("    %d    %8.1e    %8.1e", iter, rNorm, q))
+        if quad
+            q = -dot(b, x) + 0.5 * dot(x, A * x)
+            push!(qvalues, q)
+            @info(loggerCGlin, @sprintf("    %d    %8.1e    %8.1e", iter, rNorm, q))
+        end
 
         solved = rNorm ≤ ϵ
         tired = iter ≥ itmax

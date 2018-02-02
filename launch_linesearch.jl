@@ -32,5 +32,5 @@ for problem in Problems
   end
 end
 
-# writedlm("cvx_lin.txt", D)
-writedlm("ind_lin.txt", D)
+# writedlm("cvx_lin2.txt", D)
+writedlm("ind_lin2.txt", D)
