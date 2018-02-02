@@ -2,10 +2,10 @@
 
 """Armijo backtracking linesearch
 Armijo(model, x, s, fx, g, t, α) computes a step t satisfying Armijo condition
-The function returns (xtrial, fxtrial) : the new iterate for the linesearch and 
+The function returns (xtrial, fxtrial) : the new iterate for the linesearch and
 the value of the objective in xtrial
 """
-function Armijo(model, x, s, fx=obj(model, x), g=grad(model, x), t=1., α=0.8)
+function Armijo(model, x, s, fx=obj(model, x), g=grad(model, x), t=1., α=1e-4)
     @info(loggerArm, @sprintf("Armijo backtracking linesearch on problem %s", model.meta.name))
     (t ≤ 0) && (t = 1.)
     @debug(loggerArm, @sprintf("initial step t = %7.1e", t))
@@ -26,5 +26,6 @@ function Armijo(model, x, s, fx=obj(model, x), g=grad(model, x), t=1., α=0.8)
         fxtrial = obj(model, xtrial)
         β = fx + t * αgs
     end
+    @debug(loggerArm, @sprintf("final values : f(x+t*s) = %8.1e ≤ β = %8.1e", fxtrial, β))
     return xtrial, fxtrial
 end
