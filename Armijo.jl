@@ -9,7 +9,7 @@ function Armijo(model, x, s, fx=obj(model, x), g=grad(model, x), t=1., α=1e-4)
     @info(loggerArm, @sprintf("Armijo backtracking linesearch on problem %s", model.meta.name))
     (t ≤ 0) && (t = 1.)
     @debug(loggerArm, @sprintf("initial step t = %7.1e", t))
-    (α ≤ 0 || α ≥ 1) && (α = 0.8)
+    (α ≤ 0 || α ≥ 1) && (α = 1e-4)
     @debug(loggerArm, @sprintf("α = %8.1e", α))
     xtrial = x + t * s
     fxtrial = obj(model, xtrial) # f(x + t * s)
