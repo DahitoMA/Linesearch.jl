@@ -46,6 +46,10 @@ function Linesearch(model, algo ; ϵa::Float64=1e-6, ϵr::Float64=1e-6, itemax::
     tired = k ≥ itemax
     status = optimal ? "optimal" : "tired"
 
-    return x, fx, normg, k, optimal, tired, status # to use two_solvers
-    # return [model.meta.name[22:end] string(algo) n fx fx0 normg normg0 neval_obj(model) neval_grad(model) neval_hprod(model) k] # to use launch_linesearch
+    # return x, fx, normg, k, optimal, tired, status # to use two_solvers
+    fx = @sprintf("%8.3e", fx)
+    fx0 = @sprintf("%8.3e", fx0)
+    normg = @sprintf("%7.1e", normg)
+    normg0 = @sprintf("%7.1e", normg0)
+    return [model.meta.name[22:end] n fx fx0 normg normg0 neval_obj(model) neval_grad(model) neval_hprod(model) k] # to use launch_linesearch
 end
