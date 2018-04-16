@@ -41,7 +41,7 @@ palmer1c, palmer1d, palmer2c, palmer3c, palmer4c, palmer5c, palmer5d, palmer6c, 
 n = 100
 
 function lin_two_solvers()
-    solvers = Dict{Symbol, Function}(:CGlin => LCG,:CRlin => LCR)
+    solvers = Dict{Symbol, Function}(:CG => LCG,:CR => LCR)
     bmark_args = Dict{Symbol, Any}(:skipif => model -> !unconstrained(model))
 
     bmark_solvers(solvers,
@@ -52,14 +52,15 @@ end
 
 
 stats = lin_two_solvers()
-tf = font(15) # titlefont
-f = font(12)
+tf = font(18) # titlefont
+f = font(17)
 pb_type = "convex problems"
 algo_used = "CG and CR"
+
 p = performance_profile(hcat([p[:, 1] for p in values(stats)]...),
                             collect(String, [string(s) for s in keys(stats)]),
                             title=string("Performance profile : #f in the resolution of ", pb_type, " with ", algo_used),
-                            titlefont = tf, legendfont = f, guidefont = f, size = (800,800), palette=:grays) # Profile for #f
+                            titlefont = tf, legendfont = f, guidefont = f, size = (800,800))#, palette=:grays) # Profile for #f
 
 # Plots.savefig(p, string("profil_f_", pb_type, ".pdf"))
 
