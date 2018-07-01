@@ -1,0 +1,25 @@
+model     algo nvar   f(x)    f(x0)   ‖g(x)‖  ‖g(x0)‖   #f  #g  #Hv  #it #s_it #vs_it #rej_it optimal
+brownden CGlin    4 8.582e+04 7.927e+06 7.7e-01 2.1e+06   35   35   73   34  true
+cliff CGlin    2 4.032e+02 4.852e+08 1.1e+04 1.4e+10   15   15   14   14  true
+clplatea CGlin 5041 -1.259e-02 0.000e+00 3.0e-07 1.0e-01    8    7  773    6  true
+clplateb CGlin 5041 -5.095e-03 0.000e+00 2.2e-07 1.2e-02    4    4  456    3  true
+clplatec CGlin 5041 -5.021e-03 0.000e+00 2.7e-08 9.9e-02    5    5 9370    4  true
+nasty CGlin    2 2.674e-32 5.000e-01 6.5e-07 1.0e+00    2    2    2    1  true
+palmer1c CGlin    8 1.009e+04 3.453e+08 4.9e+02 5.2e+08   33   33  123   32  true
+palmer1d CGlin    7 1.577e+04 2.873e+07 5.3e+02 4.4e+07 10001 10001 15000 10000 false
+palmer2c CGlin    8 1.981e+02 2.689e+07 2.6e+01 3.9e+07    9    9   24    8  true
+palmer3c CGlin    8 5.072e+01 8.122e+06 3.4e+00 1.1e+07    6    6   17    5  true
+palmer4c CGlin    8 5.862e+01 8.094e+06 3.6e+00 1.1e+07    6    6   17    5  true
+palmer5c CGlin    6 2.128e+00 2.549e+04 1.7e-04 1.1e+03   25    9   13    8  true
+palmer5d CGlin    4 8.734e+01 2.226e+04 9.0e-11 2.0e+03  105  105  269  104  true
+palmer6c CGlin    8 1.618e+01 7.722e+05 7.8e-01 1.1e+06   12   12   48   11  true
+palmer7c CGlin    8 5.638e+01 3.205e+06 3.9e+00 4.7e+06    4    4    9    3  true
+palmer8c CGlin    8 2.221e+01 8.503e+05 1.2e+00 1.2e+06    5    5   15    4  true
+beale CGlin    2 4.583e-01 1.420e+01 2.6e-05 2.8e+01  269  144  226  143  true
+brownbs CGlin    2 4.930e-30 1.000e+12 4.4e-09 2.0e+06    8    5    4    4  true
+chnrosnb_mod CGlin  100 1.980e-08 1.764e+04 6.3e-04 6.4e+03  179  100 1161   99  true
+errinros_mod CGlin  100 7.837e+01 3.140e+05 5.8e-02 1.9e+05   37   26  143   25  true
+fletcbv3_mod CGlin  100 -8.701e-02 -1.879e-02 2.8e-03 1.6e-03 10001 10001 10001 10000 false
+genrose_nash CGlin  100 1.000e+00 4.041e+02 8.9e-06 1.3e+02  135   66  710   65  true
+meyer3 CGlin    3 6.953e+06 1.694e+09 3.1e+06 8.7e+10 10001 10001 19999 10000 false
+scosine CGlin  100 -8.359e+01 8.688e+01 2.7e+03 8.1e+02 10186 10001 1232544 10000 false

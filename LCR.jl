@@ -1,3 +1,3 @@
 function LCR(model; args...)
-    Linesearch(model, CRlin)
+    Linesearch(model, CRlin, profil=true)
 end

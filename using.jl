@@ -1,6 +1,7 @@
 using NLPModels
 using LinearOperators
 using Plots # graph
+Plots.pyplot()
 using BenchmarkTools
 using BenchmarkProfiles
 using MiniLogging

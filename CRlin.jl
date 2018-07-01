@@ -17,9 +17,11 @@ function CRlin(A, b, ϵa::Float64=1e-8, ϵr::Float64=1e-6, itmax::Int=0; quad::B
     r = b # initial residual r = b - Ax = b
     rNorm = norm(r, 2) # ‖r‖
     rNorm² = rNorm * rNorm
+    pr = rNorm²
     s = A * r
     ρ = dot(r, s)
     p = r
+    pNorm² = rNorm²
     q = s
     ϵ = ϵa + ϵr * rNorm
     pAp = ρ # = dot(p, q) = dot(r, s)
@@ -69,6 +71,8 @@ function CRlin(A, b, ϵa::Float64=1e-8, ϵr::Float64=1e-6, itmax::Int=0; quad::B
         ρ = dot(r, s)
         β = ρ / ρbar # step for the direction calculus
         p = r + β * p # descent direction
+        pNorm² = rNorm² + 2 * β * pr - 2 * β * α * pAp + β^2 * pNorm²
+        pr = rNorm² + β * pr - β * α * pAp # pᵀr
         q = s + β * q
         pAp = ρ + β^2 * pAp # dot(p, q)
 
