@@ -5,7 +5,7 @@ CG(A, b, ϵa, ϵr, itmax; quad) solves the symmetric linear system 'A * x = b'
 If quad = true, the values of the quadratic model are computed
 A can be positive definite or not.
 """
-function CGlin(A, b, ϵa::Float64=1e-8, ϵr::Float64=1e-6, itmax::Int=0; quad::Bool=false)
+function CGlin(A, b, ϵa::Float64=1e-8, ϵr::Float64=1e-6, itmax::Int=0, ε::Float64=1e-6; quad::Bool=false)
     n = size(b, 1) # size of the problem
     (size(A, 1) == n & size(A, 2) == n) || error("Inconsistent problem size")
     @info(loggerCGlin, @sprintf("CGlin: system of %d equations in %d variables", n, n))
@@ -17,15 +17,16 @@ function CGlin(A, b, ϵa::Float64=1e-8, ϵr::Float64=1e-6, itmax::Int=0; quad::B
     d = b # first descent direction
     rNorm = norm(r, 2)
     ϵ = ϵa + ϵr * rNorm
+
+    iter = 0
+    itmax == 0 && (itmax = 2 * n)
+
     if quad
         q = 0.0
         qvalues = [q] # values of the quadratic model
         @info(loggerCGlin, @sprintf("%5s %10s %10s\n", "Iter", "‖r‖", "q"))
         @info(loggerCGlin, @sprintf("    %d    %8.1e    %8.1e", iter, rNorm, q))
     end
-
-    iter = 0
-    itmax == 0 && (itmax = 2 * n)
 
     solved = rNorm ≤ ϵ
     tired = iter ≥ itmax
@@ -36,7 +37,7 @@ function CGlin(A, b, ϵa::Float64=1e-8, ϵr::Float64=1e-6, itmax::Int=0; quad::B
         dAd = dot(d, Ad)
 
         # if the model is not convexe, the algorithm stops
-        if dAd ≤ ϵ * dot(d, d)
+        if dAd ≤ ε * dot(d, d)
             @debug(loggerCGlin, @sprintf("non positive curvature dAd = %8.1e", dAd))
             iter == 1 && return b
             return x
