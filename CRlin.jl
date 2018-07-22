@@ -6,7 +6,7 @@ or the least-squares problem : 'min ‖b - A * x‖²'
 If quad = true, the values of the quadratic model are computed
 A can be positive definite or not.
 """
-function CRlin(A, b, ϵa::Float64=1e-8, ϵr::Float64=1e-6, itmax::Int=0; quad::Bool=false)
+function CRlin(A, b, ϵa::Float64=1e-8, ϵr::Float64=1e-6, itmax::Int=0, ε::Float64=1e-6; quad::Bool=false)
     n = size(b, 1) # size of the problem
     (size(A, 1) == n & size(A, 2) == n) || error("Inconsistent problem size")
     @info(loggerCRlin, @sprintf("CRlin: system of %d equations in %d variables", n, n))
@@ -26,6 +26,9 @@ function CRlin(A, b, ϵa::Float64=1e-8, ϵr::Float64=1e-6, itmax::Int=0; quad::B
     ϵ = ϵa + ϵr * rNorm
     pAp = ρ # = dot(p, q) = dot(r, s)
 
+    iter = 0
+    itmax == 0 && (itmax = 2 * n)
+
     if quad
         m = 0.0
         mvalues = [m] # values of the quadratic model
@@ -33,16 +36,13 @@ function CRlin(A, b, ϵa::Float64=1e-8, ϵr::Float64=1e-6, itmax::Int=0; quad::B
         @info(loggerCRlin, @sprintf("%5d %7.1e %8.1e", iter, rNorm, m))
     end
 
-    iter = 0
-    itmax == 0 && (itmax = 2 * n)
-
     solved = rNorm ≤ ϵ
     tired = iter ≥ itmax
 
     while ! (solved || tired)
         iter += 1
 
-        if (pAp ≤ ϵ * dot(p, p)) || (ρ ≤ ϵ * rNorm²)
+        if (pAp ≤ ε * pNorm²) || (ρ ≤ ε * rNorm²)
             @debug(loggerCRlin, @sprintf("nonpositive curvature detected: pAp = %8.1e and rAr = %8.1e", pAp, ρ))
             iter == 1 && return b
             return x
