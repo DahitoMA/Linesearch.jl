@@ -1,0 +1,9 @@
+model     algo nvar   f(x)    f(x0)   ‖g(x)‖  ‖g(x0)‖   #f  #g #Hv  #it optimal
+clplatea CRlin 5041 -1.259e-02 0.000e+00 1.1e-06 1.0e-01    8    7  646    6  true
+clplateb CRlin 5041 -5.095e-03 0.000e+00 3.6e-07 1.2e-02    4    4  411    3  true
+clplatec CRlin 5041 -5.021e-03 0.000e+00 7.3e-07 9.9e-02    5    5 10961    4  true
+chnrosnb_mod CRlin  100 1.115e-05 1.764e+04 6.1e-03 6.4e+03  200  112 1195  111  true
+errinros_mod CRlin  100 7.862e+01 3.140e+05 1.9e-01 1.9e+05   22   18   93   17  true
+fletcbv3_mod CRlin  100 -8.684e-02 -1.879e-02 2.8e-03 1.6e-03 10001 10001 10001 10000 false
+genrose_nash CRlin  100 1.000e+00 4.041e+02 8.7e-05 1.3e+02  196  110  790  109  true
+scosine CRlin  100 -4.591e+01 8.688e+01 9.1e+04 8.1e+02 10225 10001 25764 10000 false

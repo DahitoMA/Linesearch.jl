@@ -1,9 +1,17 @@
 using NLPModels
 using CUTEst
+using MiniLogging
 include("Armijo.jl")
 include("LinesearchCUTEst.jl")
 include("CGlin.jl")
 include("CRlin.jl")
+basic_config(MiniLogging.INFO; date_format="%Y-%m-%d %H:%M:%S")
+
+loggerCRlin = get_logger("CRlin")
+loggerCGlin = get_logger("CGlin")
+loggerArm = get_logger("Armijo")
+loggerLinCUTEst = get_logger("LinesearchCUTEst")
+
 
 num = parse(Int64,ARGS[1])
 Problems = open(readlines, "Problems.txt")
@@ -23,4 +31,3 @@ for algo in Algos
 end
 finalize(model)
 writedlm(string(problem, "_CUTEst.txt"), D)
-println("resolution ok !!!")
