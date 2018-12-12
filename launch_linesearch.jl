@@ -12,7 +12,6 @@ import DataFrames
 # Problems = [arglina, arglinb, arglinc, arwhead, bdqrtic, clplatea, clplateb, clplatec,
 # dixon3dq, dqdrtic, dqrtic, engval1, nondquar, power, quartc, tridia, vardim]
 
-
 # Nonconvex problems
 # Problems = [AMPGO02, AMPGO03, AMPGO04, AMPGO05, AMPGO06, AMPGO08, AMPGO09,
 # AMPGO10, AMPGO11, AMPGO12, AMPGO13, AMPGO14, AMPGO15, AMPGO18,
@@ -34,34 +33,35 @@ import DataFrames
 # scosine, sinquad, sparsine, sparsqur, srosenbr, tointgss, tquartic, woods]
 
 # Nonconvex problems var ≥ 10 (50 pbs)
-# Problems = [broydn7d, brybnd, chainwoo, chnrosnb_mod, cosine, cragglvy, curly,
-# dixmaane, dixmaanf, dixmaang, dixmaanh, dixmaani, dixmaanj, dixmaank, dixmaanl,
-# dixmaanm, dixmaann, dixmaano, dixmaanp, edensch, eg2, errinros_mod, extrosnb,
-# fletcbv2, fletcbv3_mod, fletchcr, fminsrf2, freuroth, genhumps, genrose,
-# genrose_nash, indef_mod, liarwhd, morebv, ncb20, ncb20b, noncvxu2, noncvxun,
-# nondia, penalty2, powellsg, schmvett, scosine, sinquad, sparsine, sparsqur,
-# srosenbr, tointgss, tquartic, woods]
+Problems = [broydn7d, brybnd, chainwoo, chnrosnb_mod, cosine, cragglvy, curly,
+dixmaane, dixmaanf, dixmaang, dixmaanh, dixmaani, dixmaanj, dixmaank, dixmaanl,
+dixmaanm, dixmaann, dixmaano, dixmaanp, edensch, eg2, errinros_mod, extrosnb,
+fletcbv2, fletcbv3_mod, fletchcr, fminsrf2, freuroth, genhumps, genrose,
+genrose_nash, indef_mod, liarwhd, morebv, ncb20, ncb20b, noncvxu2, noncvxun,
+nondia, penalty2, powellsg, schmvett, scosine, sinquad, sparsine, sparsqur,
+srosenbr, tointgss, tquartic, woods]
 
 
 # All pbs var ≥ 10 and not in CUTEst
-Problems = [clplatea, clplateb, clplatec, chnrosnb_mod, errinros_mod,
-fletcbv3_mod, genrose_nash, scosine]
+# Problems = [clplatea, clplateb, clplatec, chnrosnb_mod, errinros_mod,
+# fletcbv3_mod, genrose_nash, scosine]
 
-algo = CGlin
+algo = CRlin
 # csvname = string("noncvxlin",string(algo)[1:2],".csv")
 
 D = ["model     algo nvar   f(x)    f(x0)   ‖g(x)‖  ‖g(x0)‖   #f  #g #Hv  #it optimal"]
 
-@info(loggerlaunch, D[1])
-
+MiniLogging.@info(loggerlaunch, D[1])
+n = 100
 for problem in Problems
-    model = MathProgNLPModel(problem(), name=string(problem))
+    model = MathProgNLPModel(problem(n), name=string(problem))
     L = Linesearch(model, algo)
     S = @sprintf("%5s %5s %4d %5s %5s %5s %5s %4d %4d %4d %4d %5s", L[1], L[2], L[3], L[4], L[5], L[6], L[7], L[8], L[9], L[10], L[11], L[12])
-    @info(loggerlaunch, S)
+    MiniLogging.@info(loggerlaunch, S)
     D = vcat(D, S)
     reset!(model)
 end
 # DF = DataFrames.DataFrame(D)
 # CSV.write(csvname, DF)
-writedlm("ResultsCGlin.txt", D)
+# writedlm("ResultsCGlin.txt", D)
+writedlm("nonconvpbsCRlin.txt", D)
